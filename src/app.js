@@ -10,7 +10,7 @@ App = {
     loadContract: async () => {
         const todoList = await $.getJSON('ToDoList.json')
         App.contracts.ToDoList = TruffleContract(todoList)
-        App.contracts.ToDoList.setProvider(window.web3.currentProvider)
+        App.contracts.ToDoList.setProvider(window.ethereum)
         App.todoList = await App.contracts.ToDoList.deployed()
     },
 
@@ -53,6 +53,13 @@ App = {
 
             $newTaskTemplate.show()
         }
+    },
+
+    createTask: async () => {
+        App.setLoading(true)
+        const content = $('#newTask').val()
+        await App.todoList.createTask(content, { from: window.userAccount })
+        window.location.reload()
     },
 
     setLoading: (boolean) => {

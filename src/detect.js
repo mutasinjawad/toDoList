@@ -37,6 +37,6 @@ async function getAccount() {
         console.error(err)
       }
     })
-  const account = accounts[0]
-  $('#account').html(account)
+  window.userAccount = accounts[0]
+  $('#account').html(window.userAccount)
 }
