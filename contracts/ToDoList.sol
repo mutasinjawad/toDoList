@@ -2,7 +2,6 @@
 pragma solidity ^0.8.16;
 
 contract ToDoList {
-    uint public taskCount;
 
     struct Task {
         uint id;
@@ -10,20 +9,30 @@ contract ToDoList {
         bool completed;
     }
 
-    mapping(uint => Task) public tasks;
+    mapping(address => uint) public tasksCount;
+    mapping(address => mapping(uint => Task)) public tasks;
 
     event TaskCompleted(
+        uint id,
+        bool completed
+    );
+
+    event TaskCreated(
         uint id,
         string content,
         bool completed
     );
 
-    constructor() {
-        createTask("This is your to do List!");
-    }
     function createTask(string memory _content) public {
-        taskCount ++;
-        tasks[taskCount] = Task(taskCount, _content, false);
-        emit TaskCompleted(taskCount, _content, false);
+        tasksCount[msg.sender] ++;
+        tasks[msg.sender][tasksCount[msg.sender]] = Task(tasksCount[msg.sender], _content, false);
+        emit TaskCreated(tasksCount[msg.sender], _content, false);
+    }
+
+    function toggleCompleted(uint _id) public {
+        Task memory _task = tasks[msg.sender][_id];
+        _task.completed = !_task.completed;
+        tasks[msg.sender][_id] = _task;
+        emit TaskCompleted(_id, _task.completed);
     }
 }

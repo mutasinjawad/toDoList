@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider@1.2.0/dist/detect-provider.min.js"></script>
 
     <!-- Bootstrap -->
-    <link href="vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
       main {
@@ -34,6 +34,11 @@
         margin-bottom: 0px;
       }
 
+      .dropdown-menu {
+          position: absolute !important;
+          transform: translateX(-60%);
+      }
+
       #completedTaskList .content {
         color: grey;
         text-decoration: line-through;
@@ -44,8 +49,18 @@
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Todo List</a>
       <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap d-none d-sm-block">
-          <small><a class="nav-link" href="#"><span id="account"></span></a></small>
+        <li class="d-flex align-items-center">
+          <small><a class="nav-link me-3" href="#"><span id="account"></span></a></small>
+          <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="changeButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Change Account
+              </button>
+              <div class="dropdown-menu" aria-labelledby="changeButton">
+                <ul id="accountList">
+                  <a class="dropdown-item accountSelect"><span class="accounts"></span></a>
+                </ul>
+              </div>
+          </div>
         </li>
       </ul>
     </nav>
@@ -61,12 +76,12 @@
               <input type="submit" hidden="">
             </form>
             <ul id="taskList" class="list-unstyled">
-              <div class="taskTemplate checkbox" style="display: none">
+              <li class="taskTemplate checkbox" style="display: none">
                 <label>
                   <input type="checkbox" />
                   <span class="content">Task content goes here...</span>
                 </label>
-              </div>
+              </li>
             </ul>
             <ul id="completedTaskList" class="list-unstyled">
             </ul>
@@ -75,12 +90,11 @@
       </div>
     </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="vendor/truffle-contract/dist/truffle-contract.js"></script>
-    <script type="module" src="detect.js"></script>
-    <script src="app.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="vendor/truffle-contract/dist/truffle-contract.js" defer></script>
+    <script type="module" src="detect.js" defer></script>
+    <script src="app.js" defer></script>
   </body>
 </html>

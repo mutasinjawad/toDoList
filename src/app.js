@@ -21,40 +21,54 @@ App = {
 
         App.setLoading(true)
 
-        // $('#tasks').html('')
-
         await App.renderTasks()
 
         App.setLoading(false)
     },
 
     renderTasks: async () => {
-        const taskCount = await App.todoList.taskCount()
+        const account = window.userAccount
+        const taskCount = await App.todoList.tasksCount(account)
         const $taskTemplate = $('.taskTemplate')
-
+        
         for (var i = 1; i <= taskCount; i++) {
-            const task = await App.todoList.tasks(i)
+            const task = await App.todoList.tasks(account, i)
             const taskId = task[0].toNumber()
             const taskContent = task[1]
             const taskCompleted = task[2]
-
+            
             const $newTaskTemplate = $taskTemplate.clone()
             $newTaskTemplate.find('.content').html(taskContent)
             $newTaskTemplate.find('input')
-                            .prop('name', taskId)
-                            .prop('checked', taskCompleted)
-                            // .on('click', App.toggleCompleted)
-
+            .prop('name', taskId)
+            .prop('checked', taskCompleted)
+            .on('click', App.toggleCompleted)
+            
             if (taskCompleted) {
                 $('#completedTaskList').append($newTaskTemplate)
             } else {
                 $('#taskList').append($newTaskTemplate)
             }
-
+            
             $newTaskTemplate.show()
         }
     },
-
+    
+    toggleCompleted: async (e) => {
+        console.log("Pressed")
+        App.setLoading(true)
+        const taskId = e.target.name
+        
+        if (!window.userAccount) {
+            console.error("User account not found!")
+            App.setLoading(false)
+            return
+        }
+    
+        await App.todoList.toggleCompleted(taskId, { from: window.userAccount })
+        window.location.reload()
+    },
+    
     createTask: async () => {
         App.setLoading(true)
         const content = $('#newTask').val()
@@ -79,7 +93,7 @@ App = {
 }
 
 $(() => {
-    $(window).load(() => {
-      App.load()
+    $(document).ready(() => {
+        App.load()
     })
 })
